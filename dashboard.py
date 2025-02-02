@@ -5,9 +5,19 @@ import requests
 from io import BytesIO
 
 # 📌 **تنظیمات صفحه**
-st.set_page_config(page_title="📊 داشبورد معدن چاه دراز", layout="wide")
+st.set_page_config(page_title="🔒 داشبورد مدیریت معدن", layout="wide")
 
-# 📌 **لینک `Raw` فایل اکسل در GitHub (لینک خودتان را جایگزین کنید!)**
+# 📌 **سیستم ورود با رمز عبور**
+PASSWORD = "Mahdi83@Mine"  # 🔑 **اینجا رمز عبور را تنظیم کرده‌ایم**
+entered_password = st.text_input("🔑 لطفاً رمز عبور را وارد کنید:", type="password")
+
+if entered_password != PASSWORD:
+    st.warning("🚫 دسترسی مجاز نیست! لطفاً رمز عبور صحیح وارد کنید.")
+    st.stop()  # متوقف کردن اجرای برنامه در صورت ورود رمز نادرست
+
+st.success("✅ خوش آمدید! دسترسی به داشبورد مجاز است.")
+
+# 📌 **لینک `Raw` فایل اکسل در GitHub**
 file_url = "https://raw.githubusercontent.com/mahdimine83/mine-dashboard/main/گزارش_نهایی_تناژ.xlsx"
 
 @st.cache_data
@@ -15,27 +25,24 @@ def load_data():
     """دانلود فایل اکسل از GitHub و بارگذاری آن در DataFrame"""
     try:
         response = requests.get(file_url)
-        response.raise_for_status()  # بررسی موفقیت دانلود
-
+        response.raise_for_status()
         df = pd.read_excel(BytesIO(response.content), engine='openpyxl')
-        df["تاریخ"] = pd.to_datetime(df["تاریخ"], format="%Y/%m/%d")  # تبدیل تاریخ به فرمت استاندارد
+        df["تاریخ"] = pd.to_datetime(df["تاریخ"], format="%Y/%m/%d")
         return df
     except requests.exceptions.RequestException as e:
-        st.error(f"❌ خطا در دریافت داده‌ها از `GitHub`: {e}")
+        st.error(f"❌ خطا در دریافت داده‌ها از GitHub: {e}")
         return pd.DataFrame()
     except Exception as e:
         st.error(f"❌ خطای نامشخص: {e}")
         return pd.DataFrame()
 
-# 📌 دریافت داده‌ها از `GitHub`
 df = load_data()
 
-# 📌 بررسی اینکه داده‌ای برای نمایش وجود دارد یا نه
 if df.empty:
-    st.warning("⚠️ داده‌ای برای نمایش وجود ندارد. لطفاً فایل ورودی را بررسی کنید.")
+    st.warning("⚠️ داده‌ای برای نمایش وجود ندارد.")
     st.stop()
 
-st.success("✅ فایل اکسل با موفقیت از `GitHub` دانلود شد!")
+st.success("✅ فایل اکسل با موفقیت بارگذاری شد!")
 
 # 📌 **فیلتر تاریخ**
 date_filter = st.sidebar.date_input("📅 انتخاب تاریخ", df["تاریخ"].max())
@@ -73,6 +80,6 @@ fig2 = px.bar(df, x="تاریخ", y=["تناژ باطله (تن)", "تناژ س�
               title="📊 مقایسه تناژ باطله و ماده معدنی")
 st.plotly_chart(fig2, use_container_width=True)
 
-# 📌 **ذخیره داده‌ها به‌صورت CSV**
+# 📌 **دانلود داده‌ها به‌صورت CSV**
 df.to_csv("گزارش_معدن.csv", index=False)
 st.download_button(label="📥 دانلود گزارش CSV", data=df.to_csv().encode('utf-8'), file_name="گزارش_معدن.csv", mime="text/csv")
