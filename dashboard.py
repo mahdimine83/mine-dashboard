@@ -3,17 +3,18 @@ import pandas as pd
 import plotly.express as px
 import requests
 from io import BytesIO
+import jdatetime  # برای تبدیل تاریخ شمسی به میلادی
 
 # 📌 **تنظیمات صفحه**
 st.set_page_config(page_title="🔒 داشبورد مدیریت معدن", layout="wide")
 
 # 📌 **سیستم ورود با رمز عبور**
-PASSWORD = "Mahdi83@Mine"  # 🔑 **اینجا رمز عبور را تنظیم کرده‌ایم**
+PASSWORD = "Mahdi83@Mine"
 entered_password = st.text_input("🔑 لطفاً رمز عبور را وارد کنید:", type="password")
 
 if entered_password != PASSWORD:
     st.warning("🚫 دسترسی مجاز نیست! لطفاً رمز عبور صحیح وارد کنید.")
-    st.stop()  # متوقف کردن اجرای برنامه در صورت ورود رمز نادرست
+    st.stop()
 
 st.success("✅ خوش آمدید! دسترسی به داشبورد مجاز است.")
 
@@ -27,7 +28,10 @@ def load_data():
         response = requests.get(file_url)
         response.raise_for_status()
         df = pd.read_excel(BytesIO(response.content), engine='openpyxl')
-        df["تاریخ"] = pd.to_datetime(df["تاریخ"], format="%Y/%m/%d")
+
+        # تبدیل تاریخ شمسی به میلادی
+        df["تاریخ"] = df["تاریخ"].astype(str).apply(lambda x: jdatetime.datetime.strptime(x, "%Y/%m/%d").togregorian())
+        
         return df
     except requests.exceptions.RequestException as e:
         st.error(f"❌ خطا در دریافت داده‌ها از GitHub: {e}")
@@ -48,7 +52,7 @@ st.success("✅ فایل اکسل با موفقیت بارگذاری شد!")
 date_filter = st.sidebar.date_input("📅 انتخاب تاریخ", df["تاریخ"].max())
 
 # 📌 **نمایش داده‌های فیلتر شده**
-df_filtered = df[df["تاریخ"] == pd.to_datetime(date_filter)]
+df_filtered = df[df["تاریخ"] == date_filter]
 
 if df_filtered.empty:
     st.warning("⚠️ برای این تاریخ داده‌ای وجود ندارد!")
