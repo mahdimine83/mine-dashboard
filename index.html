@@ -14,9 +14,9 @@
         }
 
         .card {
-            box-shadow: 0 4px 12px rgba(0,0,0,.08);
-            border-radius: 1rem;
-            margin-bottom: 1.5rem; /* Added for spacing between cards */
+            box-shadow: 0 6px 18px rgba(0,0,0,.07); /* Softer, slightly more diffused shadow */
+            border-radius: 1rem; /* Keep existing border-radius */
+            margin-bottom: 2rem; /* Increase margin-bottom for better separation */
         }
 
         /* Responsive font sizes for card text */
@@ -45,6 +45,33 @@
             padding: 1.5rem;
             border-radius: 0.5rem;
             margin-top: 2rem;
+        }
+
+        .card-header {
+            background: linear-gradient(to bottom right, #e2f0ff, #badbff); /* Light blue gradient */
+            color: #003366; /* Darker blue text for contrast, adjust if needed */
+            border-bottom: 1px solid #add8e6; /* Light blue border */
+        }
+
+        .table > thead { /* More specific selector for table header */
+            background-color: #007bff; /* Bootstrap primary blue, or a custom shade */
+            color: #ffffff; /* White text for contrast */
+        }
+
+        .table-bordered th, .table-bordered td { /* Ensure borders are visible and perhaps slightly refined */
+            border: 1px solid #dee2e6;
+        }
+
+        .table-striped > tbody > tr:nth-of-type(odd) > * { /* Ensure striped rows have good contrast if default is overridden */
+            --bs-table-accent-bg: rgba(0, 0, 0, 0.03); /* Slightly lighter stripe */
+        }
+
+        #main-content > h1 { /* Target the H1 directly under main-content */
+            color: #003366; /* Dark blue, same as card header text for consistency */
+            padding-bottom: 0.5rem; /* Space for the border */
+            border-bottom: 3px solid #007bff; /* Bootstrap primary blue border */
+            margin-bottom: 2rem !important; /* Ensure enough space below title, override Bootstrap's default if necessary */
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1); /* Subtle text shadow for depth */
         }
     </style>
 </head>
@@ -96,7 +123,7 @@
                             <div class="card-body">
                                 <div class="table-responsive card-text-responsive">
                                     <table class="table table-striped table-bordered">
-                                        <thead class="table-light">
+                                        <thead>
                                             <tr>
                                                 <th>#</th>
                                                 <th>فرض</th>
@@ -233,19 +260,19 @@
 
                     <h5><i class="bi bi-exclamation-triangle me-2"></i>دام‌های رایج</h5>
                     <ul class="card-text-responsive">
-                        <li><strong>سرعت سطح مخزن:</strong> وقتی سطح مقطع مخزن کوچک است، سرعت آن دیگر قابل صرف‌نظر کردن نیست.</li>
-                        <li><strong>سیالات گران‌رو:</strong> حتی در لوله‌های کوتاه، سیالاتی مانند روغن افت فشار محسوس به دلیل لزجت دارند.</li>
-                        <li><strong>خط جریان اشتباه:</strong> معادله برنولی تنها برای نقاطی روی یک خط جریان یکسان معتبر است.</li>
-                        <li><strong>به‌هم‌زدن واحدها:</strong> مراقب یکسان‌سازی واحدها باشید، خصوصاً عامل \(g_c\) در سیستم انگلیسی.</li>
+                        <li><i class="bi bi-x-octagon me-2 text-danger"></i><strong>سرعت سطح مخزن:</strong> وقتی سطح مقطع مخزن کوچک است، سرعت آن دیگر قابل صرف‌نظر کردن نیست.</li>
+                        <li><i class="bi bi-x-octagon me-2 text-danger"></i><strong>سیالات گران‌رو:</strong> حتی در لوله‌های کوتاه، سیالاتی مانند روغن افت فشار محسوس به دلیل لزجت دارند.</li>
+                        <li><i class="bi bi-x-octagon me-2 text-danger"></i><strong>خط جریان اشتباه:</strong> معادله برنولی تنها برای نقاطی روی یک خط جریان یکسان معتبر است.</li>
+                        <li><i class="bi bi-x-octagon me-2 text-danger"></i><strong>به‌هم‌زدن واحدها:</strong> مراقب یکسان‌سازی واحدها باشید، خصوصاً عامل \(g_c\) در سیستم انگلیسی.</li>
                     </ul>
 
                     <h5 class="mt-4"><i class="bi bi-pencil-square me-2"></i>ترفندهای امتحانی</h5>
                     <ul class="card-text-responsive">
-                        <li><strong>انتخاب نقاط:</strong> همیشه دو نقطهٔ ۱ و ۲ را با دقت انتخاب کنید (معمولاً مراکز مقاطع یا سطوح آزاد).</li>
-                        <li><strong>ساده‌سازی معادله:</strong> فرض‌های مسئله را لیست کرده و ترم‌های صفر شونده را مستقیماً روی معادله برنولی علامت بزنید.</li>
-                        <li><strong>محاسبه افت‌ها:</strong> اگر سیستم شامل لوله است، تمام افت‌های اصلی (ناشی از اصطکاک) و جزئی (ناشی از اتصالات) را با فرمول \(h_f = f\frac{L}{D}\frac{V^{2}}{2g}+\sum K\frac{V^{2}}{2g}\) محاسبه کنید.</li>
-                        <li><strong>ثبات واحد:</strong> برای جلوگیری از اشتباه در محاسبات، همیشه مقادیر هد را با واحد متر (یا فوت) نگه دارید.</li>
-                        <li><strong>ترسیم خطوط انرژی:</strong> برای رسم EGL و HGL، ابتدا مقادیر \(H\) (هد کل) و \(P/\rho g+z\) (هد پیزومتریک) را در نقاط مختلف مسیر جریان محاسبه کنید. سپس خطوط را با حفظ اختلاف \(V^2/2g\) بینشان رسم نمایید.</li>
+                        <li><i class="bi bi-check2-circle me-2 text-success"></i><strong>انتخاب نقاط:</strong> همیشه دو نقطهٔ ۱ و ۲ را با دقت انتخاب کنید (معمولاً مراکز مقاطع یا سطوح آزاد).</li>
+                        <li><i class="bi bi-check2-circle me-2 text-success"></i><strong>ساده‌سازی معادله:</strong> فرض‌های مسئله را لیست کرده و ترم‌های صفر شونده را مستقیماً روی معادله برنولی علامت بزنید.</li>
+                        <li><i class="bi bi-check2-circle me-2 text-success"></i><strong>محاسبه افت‌ها:</strong> اگر سیستم شامل لوله است، تمام افت‌های اصلی (ناشی از اصطکاک) و جزئی (ناشی از اتصالات) را با فرمول \(h_f = f\frac{L}{D}\frac{V^{2}}{2g}+\sum K\frac{V^{2}}{2g}\) محاسبه کنید.</li>
+                        <li><i class="bi bi-check2-circle me-2 text-success"></i><strong>ثبات واحد:</strong> برای جلوگیری از اشتباه در محاسبات، همیشه مقادیر هد را با واحد متر (یا فوت) نگه دارید.</li>
+                        <li><i class="bi bi-check2-circle me-2 text-success"></i><strong>ترسیم خطوط انرژی:</strong> برای رسم EGL و HGL، ابتدا مقادیر \(H\) (هد کل) و \(P/\rho g+z\) (هد پیزومتریک) را در نقاط مختلف مسیر جریان محاسبه کنید. سپس خطوط را با حفظ اختلاف \(V^2/2g\) بینشان رسم نمایید.</li>
                     </ul>
                 </aside>
             </div>
