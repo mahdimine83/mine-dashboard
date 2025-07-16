@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Contract</title>
+</head>
+<body>
+    <h1>Add New Contract</h1>
+    <form method="post">
+        <label for="client_name">Client Name:</label><br>
+        <input type="text" id="client_name" name="client_name" required><br>
+        <label for="start_date">Start Date:</label><br>
+        <input type="date" id="start_date" name="start_date" required><br>
+        <label for="end_date">End Date:</label><br>
+        <input type="date" id="end_date" name="end_date" required><br>
+        <label for="amount">Amount:</label><br>
+        <input type="number" id="amount" name="amount" step="0.01" required><br>
+        <label for="status">Status:</label><br>
+        <select id="status" name="status" required>
+            <option value="Draft">Draft</option>
+            <option value="Active">Active</option>
+            <option value="Expired">Expired</option>
+        </select><br><br>
+        <input type="submit" value="Add Contract">
+    </form>
+    <a href="{{ url_for('index') }}">Back to Contract List</a>
+</body>
+</html>
